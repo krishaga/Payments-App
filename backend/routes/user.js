@@ -12,6 +12,12 @@ const signupbody = zod.object({
     password: zod.string()
 });
 
+const signinbody = zod.object({
+    username: zod.string().email(),
+    password: zod.string()
+});
+
+
 router.post('/signup', async (req, res) => {
     const { success } = signupbody.safeParse(req.body);
     if (!success)
@@ -46,5 +52,45 @@ router.post('/signup', async (req, res) => {
         token: token
     });
 });
+
+
+
+
+
+router.post('/signin',(req,res) => {
+    const body = req.body;
+
+    const { success } = signinbody.safeParse(body);
+    if(!success)
+        return res.status(411).json({
+            message : "Wrong details"
+        })
+
+    const user = User.findOne({
+        username : body.username,
+        password : body.password
+    });
+    if(user)
+    {
+            const token = jwt.sign({
+                userId : user._id
+            }, JWT_SECRET);
+            
+            return res.status(200).json({
+                message :"succesfull login",
+                token : token
+            }); 
+        }
+    return res.status(500).json("Wrong details")
+})
+
+
+
+
+
+
+
+
+
 
 module.exports = router;
