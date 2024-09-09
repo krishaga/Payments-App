@@ -1,10 +1,15 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const dbConnect = () => { 
-    mongoose.connect("mongodb+srv://krishagarwal1673:%3CKrishag1622%3E@cluster0.akzsi.mongodb.net/",{
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
+  mongoose.connect("mongodb+srv://krishagarwal1673:%23Krishag1622@cluster0.akzsi.mongodb.net/Paytm", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000  // Adjust timeout as needed
+  }).then(() => {
+    console.log('Connected to MongoDB');
+  }).catch(err => {
+    console.error('Error connecting to MongoDB', err);
+  });
 }
 
-module.exports({dbConnect})
+module.exports = { dbConnect };
