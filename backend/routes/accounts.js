@@ -29,6 +29,50 @@ router.get('/balance',authenticate, async(req,res) => {
 })
 
 
+router.post('/transfer', authenticate, async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startSession();
+    const { amount , to } = req.body;
+    const sender = await Accounts.findOne(req.userId).session(session);
+    if(!sender || sender.balance < amount){
+        await session.abortTransaction();
+        return res.status(404).json({
+            message : "Insufficient Balance"
+        })
+    }
+    const reciever = await Accounts.findOne(body.to).session(session);
+    
+    if(!reciever){
+        await session.abortTransaction();
+        return res.status(403).json({
+            message : "Invalid Reciever"
+        })
+    }
+
+    await Accounts.updateOne({
+        userId : req.userId
+    },
+    {
+        $inc : {
+            balance : -amount
+        }
+    }).session(session)
+
+    await Accounts.updateOne({
+        userId : to
+    },
+    {
+        $inc : {
+            balance : amount
+        }
+    }).session(session)
+
+    await session.commitTransaction();
+    
+    res.status(200).json({
+        message : "Transaction Successful"
+    })
+})
 
 
 module.exports = router
