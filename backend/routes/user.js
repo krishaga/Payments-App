@@ -5,6 +5,7 @@ const router = express.Router();
 const { User } = require('../models/user');
 const { JWT_SECRET } = require('../config');
 const { authenticate } = require('../middleware/authenticate');
+const { Accounts } = require('../models/Accounts');
 
 const signupbody = zod.object({
     username: zod.string().email(),
@@ -53,8 +54,12 @@ router.post('/signup', async (req, res) => {
         lastName: req.body.lastName,
         password: req.body.password
     });
-
     const userId = dbuser._id;
+
+    await Accounts.create({
+        userId,
+        balance : ((Math.random()*10000)+1)
+    })
 
     const token = jwt.sign({
         userId
