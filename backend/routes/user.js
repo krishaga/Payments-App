@@ -114,27 +114,25 @@ router.put('/update', authenticate, async(req,res) => {
 })
 
 
-router.get('/bulk', authenticate, async(req,res) => {
-    const filter = req.query.filter || "";
+router.get('/bulk', authenticate, async (req, res) => {
+    const searchTerm = req.query.filter || "";
+    const regex = new RegExp(searchTerm, 'i');  
     const users = await User.find({
-        $or: [{
-            firstName :{
-                "$regex" : filter
-            },
-            lastName : {
-                "$regex" : filter
-            }
-        }] 
-    })
+        $or: [
+            { firstName: { $regex: regex } },
+            { lastName: { $regex: regex } }
+        ]
+    });
+
     res.status(200).json({
-        user: users.map(user =>({
+        users: users.map(user => ({
             username: user.username,
             firstName: user.firstName,
             lastName: user.lastName,
             _id: user._id
         }))
     });
-})
+});
 
 
 module.exports = router;
