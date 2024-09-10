@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mainRoutes = require('./routes/index');
 const { dbConnect } = require('./db');  // Don't forget to call dbConnect to establish a connection
