@@ -1,8 +1,9 @@
 import { Heading } from "./Heading"
 import { SearchBar } from "./SearchBar"
-
+import {useNavigate} from "react-router-dom"
 
 export function UsersComponent({label}){ 
+    const navigate = useNavigate();
     return <div>
         <div className="font-bold text-2xl pl-10 pb-4 text-black">
             Users
@@ -20,8 +21,9 @@ export function UsersComponent({label}){
             <div className="flex justify-end -mr-2">
                 <button 
                     type="button" 
-                    class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm p-4 px-6 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                    onClick={'/Dashboard'}>
+                    className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm p-4 px-6 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                    onClick =  { () =>
+                        navigate('/Transfer')}>
                     Send Money
                 </button>
                 
