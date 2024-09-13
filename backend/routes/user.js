@@ -35,7 +35,7 @@ const dataBody = zod.object({
 router.post('/signup', async (req, res) => {
     const { success } = signupbody.safeParse(req.body);
     if (!success)
-        return res.status(411).json({
+        return res.status(400).json({
             message: "Incorrect inputs"
         });
 
@@ -44,7 +44,7 @@ router.post('/signup', async (req, res) => {
     });
 
     if (existingUser)
-        return res.status(411).json({
+        return res.status(409).json({
             message: "User already exists"
         });
 
@@ -58,12 +58,12 @@ router.post('/signup', async (req, res) => {
 
     await Accounts.create({
         userId,
-        balance : ((Math.random()*10000)+1)
+        balance : ((Math.random()*10000)+1).toFixed(2)
     })
 
     const token = jwt.sign({
         userId
-    }, JWT_SECRET);
+    }, JWT_SECRET, { expiresIn : '30d' });
 
     res.json({
         message: "User created successfully",
@@ -75,7 +75,7 @@ router.post('/signup', async (req, res) => {
 
 
 
-router.post('/signin',(req,res) => {
+router.post('/signin',async (req,res) => {
     const body = req.body;
 
     const { success } = signinbody.safeParse(body);
@@ -84,7 +84,7 @@ router.post('/signin',(req,res) => {
             message : "Wrong details"
         })
 
-    const user = User.findOne({
+    const user = await User.findOne({
         username : body.username,
         password : body.password
     });

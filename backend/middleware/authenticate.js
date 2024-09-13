@@ -11,8 +11,9 @@ const authenticate = (req,res,next) => {
 
     const token = authheader.split(' ')[1];
     try{
-        const verify = jwt.verify(token, JWT_SECRET);
-        req.userId = verify.userId;
+        jwt.verify(token, JWT_SECRET,function(err,decoded){
+            req.userId = decoded.userId;
+        });
         next();
     }catch(err){
         return res.status(403).json({

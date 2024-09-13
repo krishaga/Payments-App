@@ -6,9 +6,11 @@ const mongoose = require('mongoose')
 
 router.get('/balance',authenticate, async(req,res) => {
     const body = req.userId;
+    // console.log(body)
     const data = await Accounts.findOne({
         userId : body
     });
+    console.log(data)
     if(data)
     {
         return res.status(200).json({
