@@ -8,7 +8,7 @@ export function Navbar({label}){
         </div>
         <div className="flex justify-between gap-4  ">
             <div className="font-medium">
-                Hello, User
+                Hello, {label}
             </div>
             <div className=" rounded-full w-7 h-7 bg-slate-500  text-center">
                 U
