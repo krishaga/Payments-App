@@ -12,14 +12,10 @@ export function UsersComponent({label}){
 
     useEffect(() => {
         const getData = async() => {
-            // const params = {
-            //     filter : {search}
-            // }
             const response = await axios.get(`http://localhost:3000/api/v1/user/bulk?filter=${search}`,{
                 headers : {
                     Authorization : "Bearer " + localStorage.getItem('token')
                 }
-                // params
             })
             setuserData(response.data.users)
         }
