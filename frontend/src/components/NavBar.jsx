@@ -11,7 +11,7 @@ export function Navbar({label}){
                 Hello, {label}
             </div>
             <div className=" rounded-full w-7 h-7 bg-slate-500  text-center">
-                U
+                {label[0]}
             </div>
         </div>
     </div>
