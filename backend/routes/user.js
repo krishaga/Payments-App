@@ -118,10 +118,9 @@ router.put('/update', authenticate, async(req,res) => {
     })
 })
 
-
 router.get('/bulk', authenticate, async (req, res) => {
     const searchTerm = req.query.filter || "";
-    const regex = new RegExp(searchTerm, 'i');  
+    const regex = new RegExp(searchTerm, 'i');
     const users = await User.find({
         $or: [
             { firstName: { $regex: regex } },
@@ -130,14 +129,23 @@ router.get('/bulk', authenticate, async (req, res) => {
     });
 
     res.status(200).json({
-        users: users.map(user => ({
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            _id: user._id
-        }))
+        users: users
     });
 });
+
+
+
+router.get('/userdetailbyid', authenticate, async(req,res)=> {
+    const queryParam = req.userId;
+    const userdetails = await User.find({_id : queryParam})
+    if(!userdetails)
+        return res.status(409).json({message : "Invalid Data"})
+    return res.status(200).json({
+        message : "Succesfull",
+        userdetails : userdetails});
+})
+ 
+
 
 
 module.exports = router;
