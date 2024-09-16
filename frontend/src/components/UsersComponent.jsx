@@ -3,12 +3,15 @@ import { Heading } from "./Heading"
 import { SearchBar } from "./SearchBar"
 import {useNavigate} from "react-router-dom"
 import axios from "axios";
+import { useDebounce } from "../hooks/Debounce";
 
 
 export function UsersComponent({label}){ 
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const [userData, setuserData] = useState([])
+    const debouncedValue = useDebounce(search , 200)
+
 
     useEffect(() => {
         const getData = async() => {
@@ -20,7 +23,7 @@ export function UsersComponent({label}){
             setuserData(response.data.users)
         }
         getData()
-    },[search])
+    },[debouncedValue])
 
 
     return <div>
